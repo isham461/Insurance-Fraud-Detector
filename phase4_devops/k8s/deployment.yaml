@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: insurance-backend-deployment
+  labels:
+    app: insurance-backend
+spec:
+  replicas: 2 # High availability
+  selector:
+    matchLabels:
+      app: insurance-backend
+  template:
+    metadata:
+      labels:
+        app: insurance-backend
+    spec:
+      containers:
+      - name: insurance-backend
+        image: yourdockerhub/insurance-backend:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: pg-url
+        - name: ENCRYPTION_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: encryption-secrets
+              key: secret-key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: insurance-backend-service
+spec:
+  type: ClusterIP
+  selector:
+    app: insurance-backend
+  ports:
+  - port: 80
+    targetPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: insurance-frontend-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: insurance-frontend
+  template:
+    metadata:
+      labels:
+        app: insurance-frontend
+    spec:
+      containers:
+      - name: insurance-frontend
+        image: yourdockerhub/insurance-frontend:latest
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: insurance-frontend-service
+spec:
+  type: LoadBalancer # Expose to external traffic
+  selector:
+    app: insurance-frontend
+  ports:
+  - port: 80
+    targetPort: 80

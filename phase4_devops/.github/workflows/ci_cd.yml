@@ -1,0 +1,47 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test-backend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r phase2_backend/requirements.txt
+        
+    # Example security check (Bandit for Python)
+    - name: Run Bandit (Security Vulnerability Scanner)
+      run: |
+        pip install bandit
+        bandit -r phase2_backend/ -c bandit.yaml || true
+        
+    # - name: Run Pytest (Add tests in future)
+    #   run: |
+    #     pip install pytest
+    #     pytest phase2_backend/tests/
+
+  build-docker-images:
+    needs: build-and-test-backend
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    # In a real scenario, you'd log in to DockerHub/ECR here
+    - name: Build Backend Image
+      run: docker build -t insurance-backend:latest -f phase4_devops/Dockerfile.backend phase2_backend/
+      
+    - name: Build Frontend Image
+      run: docker build -t insurance-frontend:latest -f phase4_devops/Dockerfile.frontend phase3_frontend/

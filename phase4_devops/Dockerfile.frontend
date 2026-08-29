@@ -1,0 +1,25 @@
+# Build Stage
+FROM node:18-alpine as build
+WORKDIR /app
+
+# Install dependencies first (leverage Docker cache)
+# Assuming a standard package.json exists in phase3_frontend
+COPY package*.json ./
+# Use npm install, ignoring strict ci checks if package-lock is missing
+RUN npm install
+
+# Copy source code and build
+COPY . .
+RUN npm run build
+
+# Production Stage (Nginx)
+FROM nginx:alpine
+
+# Copy built assets from build stage to nginx web root
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# SECURITY: Basic hardening of Nginx could go here (e.g. dropping root privileges), 
+# but alpine nginx is relatively safe out-of-the-box for simple apps.
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
