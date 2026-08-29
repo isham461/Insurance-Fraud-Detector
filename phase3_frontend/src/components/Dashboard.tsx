@@ -24,7 +24,9 @@ const Dashboard: React.FC = () => {
     useEffect(() => {
         const fetchClaims = async () => {
             try {
-                const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+                let apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+                if (apiUrl.endsWith('/')) apiUrl = apiUrl.slice(0, -1);
+                
                 const res = await fetch(`${apiUrl}/api/v1/claims`);
                 if (res.ok) {
                     const data: ClaimUpdate[] = await res.json();
@@ -38,7 +40,9 @@ const Dashboard: React.FC = () => {
         };
         fetchClaims();
 
-        const wsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:8000';
+        let wsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:8000';
+        if (wsUrl.endsWith('/')) wsUrl = wsUrl.slice(0, -1);
+        
         const ws = new WebSocket(`${wsUrl}/api/v1/ws/dashboard`);
         
         ws.onopen = () => setConnectionStatus('Connected');
@@ -61,7 +65,9 @@ const Dashboard: React.FC = () => {
 
     const handleUpdateStatus = async (id: number, newStatus: string) => {
         try {
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+            let apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+            if (apiUrl.endsWith('/')) apiUrl = apiUrl.slice(0, -1);
+            
             const res = await fetch(`${apiUrl}/api/v1/claims/${id}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
