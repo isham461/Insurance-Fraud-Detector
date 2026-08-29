@@ -9,7 +9,7 @@ interface ClaimUpdate {
     status: string;
     fraud_score?: number;
     risk_level?: string;
-    reason_flags?: string[];
+    risk_factors?: string[];
     extracted_receipt_amount?: number;
     evidence_url?: string;
 }
@@ -220,11 +220,11 @@ const Dashboard: React.FC = () => {
                                 <li><strong>Risk Level:</strong> {selectedClaim.risk_level}</li>
                             </ul>
 
-                            {selectedClaim.reason_flags && selectedClaim.reason_flags.length > 0 ? (
-                                <div style={{ marginTop: '1rem', padding: '0.75rem', background: '#fee2e2', color: '#991b1b', borderRadius: '6px', fontWeight: 500, fontSize: '0.9rem' }}>
+                            {selectedClaim.risk_factors && selectedClaim.risk_factors.length > 0 ? (
+                                <div style={{ marginTop: '1rem', padding: '0.75rem', background: '#fee2e2', color: '#991b1b', borderRadius: '6px', fontSize: '0.9rem' }}>
                                     🚨 <strong>RISK FACTORS DETECTED:</strong>
                                     <ul style={{ marginTop: '0.5rem', marginBottom: 0 }}>
-                                        {selectedClaim.reason_flags.map((reason, idx) => (
+                                        {selectedClaim.risk_factors.map((reason, idx) => (
                                             <li key={idx}>{reason}</li>
                                         ))}
                                     </ul>
