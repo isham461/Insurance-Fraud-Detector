@@ -37,3 +37,5 @@ yarn-error.log*
 *.png
 *.csv
 test_submission.py
+generate_tutor_pdf.py
+project_documentation.md

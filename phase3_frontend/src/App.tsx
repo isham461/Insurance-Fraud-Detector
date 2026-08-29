@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import ClaimForm from './components/ClaimForm';
 import Dashboard from './components/Dashboard';
 
