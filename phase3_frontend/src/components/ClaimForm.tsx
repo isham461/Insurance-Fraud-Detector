@@ -1,5 +1,12 @@
 import { useState } from 'react';
 
+interface ClaimResult {
+    id: number;
+    fraud_score: number;
+    risk_level: string;
+    reason_flags?: string[];
+}
+
 const ClaimForm: React.FC = () => {
     const [formData, setFormData] = useState({
         claimant_name: '',
@@ -10,6 +17,7 @@ const ClaimForm: React.FC = () => {
     const [evidenceFile, setEvidenceFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [statusMessage, setStatusMessage] = useState<string | null>(null);
+    const [claimResult, setClaimResult] = useState<ClaimResult | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -32,13 +40,19 @@ const ClaimForm: React.FC = () => {
             const res = await fetch(`${apiUrl}/api/v1/claims`, {
                 method: 'POST',
                 body: data
-                // Note: Do NOT set Content-Type header when sending FormData. The browser sets it automatically with the correct boundary.
             });
             if (res.ok) {
-                setStatusMessage('Claim submitted successfully!');
+                const resultData = await res.json();
+                setStatusMessage('');
                 setFormData({ claimant_name: '', incident_type: 'Vehicle Collision', claimed_amount: '', claim_text: '' });
                 setEvidenceFile(null);
                 setPreviewUrl(null);
+                setClaimResult({
+                    id: resultData.id,
+                    fraud_score: resultData.fraud_score,
+                    risk_level: resultData.risk_level,
+                    reason_flags: resultData.reason_flags
+                });
             } else {
                 setStatusMessage('Failed to submit claim.');
             }
@@ -61,7 +75,7 @@ const ClaimForm: React.FC = () => {
     };
 
     return (
-        <div className="card">
+        <div className="card" style={{ position: 'relative' }}>
             <h2>Submit Insurance Claim</h2>
             {statusMessage && <div style={{ marginBottom: '1rem', color: 'var(--accent-color)' }}>{statusMessage}</div>}
             
@@ -137,8 +151,45 @@ const ClaimForm: React.FC = () => {
                     Submit Claim
                 </button>
             </form>
+
+            {claimResult && (
+                <div style={{
+                    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
+                    backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000
+                }}>
+                    <div className="card" style={{ width: '500px', maxWidth: '90%', position: 'relative', textAlign: 'center' }}>
+                        <button 
+                            onClick={() => setClaimResult(null)} 
+                            style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: 'var(--text-secondary)' }}
+                        >&times;</button>
+                        
+                        <h2 style={{ marginBottom: '1.5rem', color: 'var(--success-color)' }}>Claim Submitted Successfully!</h2>
+                        
+                        <div style={{ padding: '1.5rem', background: '#f9fafb', borderRadius: '8px', border: '1px solid var(--card-border)', marginBottom: '1.5rem' }}>
+                            <h3 style={{ marginTop: 0 }}>AI Analysis Result</h3>
+                            <p><strong>Claim ID:</strong> #{claimResult.id}</p>
+                            <p><strong>Fraud Score:</strong> {claimResult.fraud_score}%</p>
+                            <p><strong>Risk Level:</strong> <span style={{ color: claimResult.risk_level === 'CRITICAL' || claimResult.risk_level === 'HIGH' ? 'var(--danger-color)' : 'var(--success-color)', fontWeight: 'bold' }}>{claimResult.risk_level}</span></p>
+                            
+                            {claimResult.reason_flags && claimResult.reason_flags.length > 0 && (
+                                <div style={{ marginTop: '1rem', textAlign: 'left', background: '#fee2e2', padding: '1rem', borderRadius: '6px', color: '#991b1b', fontSize: '0.9rem' }}>
+                                    <strong>Detected Risk Factors:</strong>
+                                    <ul style={{ margin: '0.5rem 0 0 0', paddingLeft: '1.2rem' }}>
+                                        {claimResult.reason_flags.map((flag, idx) => <li key={idx}>{flag}</li>)}
+                                    </ul>
+                                </div>
+                            )}
+                        </div>
+
+                        <button className="btn" onClick={() => setClaimResult(null)}>
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
 
 export default ClaimForm;
+

@@ -94,6 +94,8 @@ const Dashboard: React.FC = () => {
         if (activeFilter === 'Pending Review') return u.status === 'PROCESSING';
         if (activeFilter === 'Approved') return u.status === 'APPROVED';
         if (activeFilter === 'Rejected') return u.status === 'REJECTED';
+        
+        if (activeFilter === 'All') return u.status !== 'REJECTED';
         return true;
     });
 
