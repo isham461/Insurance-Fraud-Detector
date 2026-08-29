@@ -24,7 +24,8 @@ const Dashboard: React.FC = () => {
     useEffect(() => {
         const fetchClaims = async () => {
             try {
-                const res = await fetch('http://localhost:8000/api/v1/claims');
+                const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+                const res = await fetch(`${apiUrl}/api/v1/claims`);
                 if (res.ok) {
                     const data: ClaimUpdate[] = await res.json();
                     // Sort descending by ID just in case
@@ -37,7 +38,8 @@ const Dashboard: React.FC = () => {
         };
         fetchClaims();
 
-        const ws = new WebSocket('ws://localhost:8000/api/v1/ws/dashboard');
+        const wsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:8000';
+        const ws = new WebSocket(`${wsUrl}/api/v1/ws/dashboard`);
         
         ws.onopen = () => setConnectionStatus('Connected');
         ws.onclose = () => setConnectionStatus('Disconnected');
@@ -59,7 +61,8 @@ const Dashboard: React.FC = () => {
 
     const handleUpdateStatus = async (id: number, newStatus: string) => {
         try {
-            const res = await fetch(`http://localhost:8000/api/v1/claims/${id}`, {
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+            const res = await fetch(`${apiUrl}/api/v1/claims/${id}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: newStatus })

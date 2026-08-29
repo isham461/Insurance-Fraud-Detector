@@ -26,7 +26,8 @@ const ClaimForm: React.FC = () => {
         }
 
         try {
-            const res = await fetch('http://localhost:8000/api/v1/claims', {
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+            const res = await fetch(`${apiUrl}/api/v1/claims`, {
                 method: 'POST',
                 body: data
                 // Note: Do NOT set Content-Type header when sending FormData. The browser sets it automatically with the correct boundary.
