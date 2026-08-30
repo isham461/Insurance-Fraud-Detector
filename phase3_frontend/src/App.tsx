@@ -77,31 +77,30 @@ function App() {
   }
 
   return (
-    <div className="app-container">
-      <header className="header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
+    <>
+      <div className="top-nav">
+        <span className="top-nav-text">
+          Logged in as <strong>{user.email}</strong> ({user.role})
+        </span>
+        <button 
+          className="logout-btn" 
+          onClick={handleLogout}
+        >
+          Log Out
+        </button>
+      </div>
+      
+      <div className="app-container">
+        <header className="header">
           <h1 style={{ margin: 0 }}>TrustScore API</h1>
           <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem', marginBottom: 0 }}>Next-Generation Fraud Detection & Processing</p>
-        </div>
+        </header>
         
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-            Logged in as <strong>{user.email}</strong> ({user.role})
-          </span>
-          <button 
-            className="btn" 
-            style={{ padding: '0.4rem 1rem', background: 'var(--danger-color)' }}
-            onClick={handleLogout}
-          >
-            Log Out
-          </button>
+        <div className="tab-content">
+          {user.role === 'claimant' ? <ClaimForm /> : <Dashboard />}
         </div>
-      </header>
-      
-      <div className="tab-content">
-        {user.role === 'claimant' ? <ClaimForm /> : <Dashboard />}
       </div>
-    </div>
+    </>
   );
 }
 

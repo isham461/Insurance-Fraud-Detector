@@ -307,3 +307,72 @@ td {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* Top Navigation Bar */
+.top-nav {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 2rem;
+  background: #ffffff;
+  border-bottom: 1px solid var(--card-border);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+}
+
+.top-nav-text {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.logout-btn {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--card-border);
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  background: #fef2f2;
+  color: var(--danger-color);
+  border-color: #fca5a5;
+}
+
+/* Global Box Sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 1.5rem 1rem;
+    gap: 1.5rem;
+  }
+  
+  .card {
+    padding: 1.5rem;
+  }
+  
+  .header h1 {
+    font-size: 2rem;
+  }
+  
+  .top-nav {
+    padding: 1rem;
+    justify-content: space-between;
+  }
+  
+  .top-nav-text {
+    font-size: 0.8rem;
+  }
+  
+  .logout-btn {
+    padding: 0.35rem 0.75rem;
+  }
+}
