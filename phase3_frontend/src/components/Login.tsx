@@ -49,7 +49,10 @@ const Login: React.FC = () => {
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
             <div className="card" style={{ maxWidth: '400px', width: '100%', padding: '2rem' }}>
-                <h2 style={{ textAlign: 'center', marginBottom: '1.5rem' }}>TrustScore AI Authentication</h2>
+                <h2 style={{ textAlign: 'center', marginBottom: '0.2rem' }}>Sign in to TrustScore AI</h2>
+                <p style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: 0, marginBottom: '1.5rem' }}>
+                    Enter your credentials to access the dashboard.
+                </p>
                 
                 {errorMsg && <div style={{ color: 'var(--danger-color)', marginBottom: '1rem', textAlign: 'center' }}>{errorMsg}</div>}
                 {successMsg && <div style={{ color: 'var(--success-color)', marginBottom: '1rem', textAlign: 'center' }}>{successMsg}</div>}
