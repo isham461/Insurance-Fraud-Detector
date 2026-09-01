@@ -1,6 +1,6 @@
-# TrustScore API 🛡️
+# TrustScore AI 🛡️
 
-TrustScore API is a next-generation, AI-driven insurance fraud detection system. It utilizes Google's Gemini 3.6 Flash multimodal AI to analyze unstructured insurance claims alongside uploaded evidence (receipts, invoices, police reports), automatically flagging financial discrepancies and NLP risk markers in real-time.
+TrustScore AI is a next-generation, AI-driven insurance fraud detection system. It utilizes Google's Gemini 3.6 Flash multimodal AI to analyze unstructured insurance claims alongside uploaded evidence (receipts, invoices, police reports), automatically flagging financial discrepancies and NLP risk markers in real-time.
 
 ## System Architecture 🏗️
 

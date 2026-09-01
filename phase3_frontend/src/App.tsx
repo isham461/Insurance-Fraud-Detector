@@ -92,7 +92,7 @@ function App() {
       
       <div className="app-container">
         <header className="header">
-          <h1 style={{ margin: 0 }}>TrustScore API</h1>
+          <h1 style={{ margin: 0 }}>TrustScore AI</h1>
           <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem', marginBottom: 0 }}>Next-Generation Fraud Detection & Processing</p>
         </header>
         
